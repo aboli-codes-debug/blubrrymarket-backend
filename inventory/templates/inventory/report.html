@@ -1,0 +1,57 @@
+{% load inventory_extras %}<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>گزارش موجودی انبار</title>
+  <style>
+    body { font-family: Tahoma, "Segoe UI", sans-serif; background:#f6f4fb; color:#2b2340; margin:0; padding:24px; }
+    .wrap { max-width: 1000px; margin: 0 auto; }
+    h1 { margin: 0 0 4px; }
+    .top { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+    a { color:#5b3fb5; }
+    .cards { display:flex; gap:12px; margin-bottom:18px; flex-wrap:wrap; }
+    .card { background:#fff; border-radius:14px; padding:14px 18px; box-shadow:0 1px 4px rgba(0,0,0,.08); min-width:180px; }
+    .card b { display:block; font-size:22px; margin-top:4px; }
+    table { width:100%; border-collapse:collapse; background:#fff; border-radius:14px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,.08); }
+    th, td { padding:10px 12px; text-align:right; border-bottom:1px solid #eee; }
+    th { background:#ece6fb; }
+    .out { color:#c0392b; font-weight:bold; }
+    .low { color:#d68910; font-weight:bold; }
+    .ok  { color:#1e8449; font-weight:bold; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <h1>گزارش موجودی انبار</h1>
+    <a href="{% url 'admin:index' %}">← بازگشت به پنل مدیریت</a>
+  </div>
+  <div class="cards">
+    <div class="card">مجموع تعداد کالا در انبار<b>{{ total_units }}</b></div>
+    <div class="card">ارزش کل موجودی (تومان)<b>{{ total_value|money }}</b></div>
+    <div class="card">تعداد انواع کالا<b>{{ rows|length }}</b></div>
+  </div>
+  <table>
+    <thead>
+      <tr><th>کالا</th><th>کد</th><th>دسته‌بندی</th><th>قیمت (تومان)</th><th>موجودی</th><th>ارزش (تومان)</th><th>وضعیت</th></tr>
+    </thead>
+    <tbody>
+    {% for row in rows %}
+      <tr>
+        <td><a href="{% url 'admin:inventory_product_change' row.product.pk %}">{{ row.product.name }}</a></td>
+        <td>{{ row.product.sku }}</td>
+        <td>{{ row.product.category }}</td>
+        <td>{{ row.product.price|money }}</td>
+        <td>{{ row.product.stock_qty }}</td>
+        <td>{{ row.value|money }}</td>
+        <td class="{{ row.status.0 }}">{{ row.status.1 }}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="7">هنوز کالایی ثبت نشده است.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

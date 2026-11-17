@@ -1,0 +1,7 @@
+{% extends "admin/index.html" %}
+{% block content %}
+<p style="margin: 0 0 18px;">
+  <a href="{% url 'inventory:report' %}" style="font-weight:bold;">📊 گزارش موجودی انبار</a>
+</p>
+{{ block.super }}
+{% endblock %}
